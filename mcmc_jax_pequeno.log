@@ -1,0 +1,136 @@
+WARNING:2026-06-18 22:32:26,034:jax._src.xla_bridge:864: An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+
+=================================================================
+  MERIDIAN PROFILING — MCMC PRODUCCIÓN
+  Perfil: PEQUENO | Backend: JAX
+  Geos: 2 | Media ch: 3 | RF ch: 2 | Tiempo: 52 semanas
+  MCMC: 4 cadenas × (500 adapt + 500 burnin + 500 keep) = 6000 steps totales
+  Datos estimados: ~0.0 MB (arrays float32)
+=================================================================
+
+  [warmup] Cargando módulos...
+  [warmup] Listo en 2.2s
+
+
+▶  Midiendo: 1. InputData (xarray)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        0.186s
+   🧠 Memoria delta: 0.35 MB
+
+=================================================================
+  DIMENSIONES DEL DATASET
+=================================================================
+  kpi shape     = (2, 52)
+  media shape   = (2, 55, 3)
+  reach shape   = (2, 55, 2)
+  controls      = (2, 52, 2)
+  Datos (float32): ~0.01 MB
+=================================================================
+
+
+▶  Midiendo: 2. Meridian (instanciacion)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        2.245s
+   🧠 Memoria delta: 6.86 MB
+
+▶  Midiendo: 3. MCMC produccion (4c×1500 steps)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        146.205s
+   🧠 Memoria delta: 91.37 MB
+
+▶  Midiendo: 4. Analyzer (incremental_outcome)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        0.358s
+   🧠 Memoria delta: 0.99 MB
+
+=================================================================
+  RESUMEN — PEQUENO | JAX
+=================================================================
+  Fase                                     Tiempo (s)  Mem Δ (MB)
+  ────────────────────────────────────────────────────────────
+  1. InputData (xarray)                        0.186        0.35
+  2. Meridian (instanciacion)                  2.245        6.86
+  3. MCMC produccion (4c×1500 steps)         146.205       91.37
+  4. Analyzer (incremental_outcome)            0.358        0.99
+  ────────────────────────────────────────────────────────────
+  TOTAL                                      148.993       99.57
+=================================================================
+
+
+=================================================================
+  HOTSPOTS DE CPU
+=================================================================
+
+  ▸ 1. InputData (xarray)
+    ───────────────────────────────────────────────────────
+       List reduced from 811 to 15 due to restriction <15>
+            1    0.000    0.000    0.185    0.185 /tmp/opencode/meridian_synthetic_data.py:95(construir_input_data)
+            1    0.000    0.000    0.185    0.185 /home/javilazaro/Documents/meridian/meridian/meridian/data/test_utils.py:1790(sample_input_data_revenue)
+            1    0.000    0.000    0.157    0.157 <string>:2(__init__)
+            1    0.000    0.000    0.157    0.157 /home/javilazaro/Documents/meridian/meridian/meridian/data/input_data.py:291(__post_init__)
+            1    0.000    0.000    0.127    0.127 /home/javilazaro/Documents/meridian/meridian/meridian/data/input_data.py:783(_validate_time_formats)
+            8    0.001    0.000    0.127    0.016 /home/javilazaro/Documents/meridian/meridian/meridian/data/validator.py:22(validate_time_coord_format)
+          440    0.000    0.000    0.080    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/xarray/core/dataarray.py:888(__getitem__)
+          435    0.000    0.000    0.079    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/xarray/core/common.py:208(_iter)
+          429    0.004    0.000    0.073    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/xarray/core/dataarray.py:1509(isel)
+
+  ▸ 2. Meridian (instanciacion)
+    ───────────────────────────────────────────────────────
+       List reduced from 2877 to 15 due to restriction <15>
+            1    0.000    0.000    2.245    2.245 /tmp/opencode/meridian_synthetic_data.py:104(instanciar_modelo)
+       229/99    0.001    0.000    2.001    0.020 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/traceback_util.py:176(reraise_with_filtered_traceback)
+       229/99    0.002    0.000    2.000    0.020 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:259(cache_miss)
+       229/99    0.003    0.000    1.995    0.020 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:136(_python_pjit_helper)
+      725/483    0.004    0.000    1.832    0.004 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/profiler.py:361(wrapper)
+            1    0.000    0.000    1.760    1.760 /home/javilazaro/Documents/meridian/meridian/meridian/model/model.py:196(__init__)
+           99    0.002    0.000    1.646    0.017 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:1721(_pjit_call_impl_python)
+            1    0.000    0.000    1.479    1.479 /home/javilazaro/Documents/meridian/meridian/meridian/model/context.py:69(__init__)
+            1    0.000    0.000    1.108    1.108 /home/javilazaro/Documents/meridian/meridian/meridian/model/context.py:211(_validate_geo_invariants)
+
+  ▸ 3. MCMC produccion (4c×1500 steps)
+    ───────────────────────────────────────────────────────
+       List reduced from 5113 to 15 due to restriction <15>
+            1    0.000    0.000  146.205  146.205 /tmp/opencode/meridian_synthetic_data.py:128(ejecutar_mcmc_produccion)
+            1    0.000    0.000  146.205  146.205 /home/javilazaro/Documents/meridian/meridian/meridian/model/model.py:1072(sample_posterior)
+            1    0.001    0.001  144.006  144.006 /home/javilazaro/Documents/meridian/meridian/meridian/model/posterior_sampler.py:751(__call__)
+    14989/273    0.035    0.000  128.500    0.471 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/traceback_util.py:176(reraise_with_filtered_traceback)
+    3578/1382    0.023    0.000  127.564    0.092 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/profiler.py:361(wrapper)
+    14795/700    0.122    0.000  127.172    0.182 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:259(cache_miss)
+    14795/700    0.205    0.000  127.151    0.182 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:136(_python_pjit_helper)
+     2438/289    0.007    0.000   98.620    0.341 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/linear_util.py:210(call_wrapped)
+     2082/289    0.019    0.000   98.585    0.341 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/linear_util.py:427(_get_result_paths_thunk)
+
+  ▸ 4. Analyzer (incremental_outcome)
+    ───────────────────────────────────────────────────────
+       List reduced from 1396 to 15 due to restriction <15>
+            1    0.000    0.000    0.358    0.358 /tmp/opencode/meridian_synthetic_data.py:293(_analyzer_posterior)
+            1    0.001    0.001    0.358    0.358 /home/javilazaro/Documents/meridian/meridian/meridian/analysis/analyzer.py:1311(incremental_outcome)
+         36/4    0.000    0.000    0.327    0.082 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/traceback_util.py:176(reraise_with_filtered_traceback)
+         36/4    0.000    0.000    0.327    0.082 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:259(cache_miss)
+         36/4    0.000    0.000    0.327    0.082 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:136(_python_pjit_helper)
+        94/56    0.000    0.000    0.317    0.006 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/profiler.py:361(wrapper)
+            4    0.000    0.000    0.229    0.057 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/pjit.py:1721(_pjit_call_impl_python)
+            4    0.000    0.000    0.136    0.034 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/interpreters/pxla.py:2512(compile)
+            4    0.000    0.000    0.136    0.034 /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/interpreters/pxla.py:3027(from_hlo)
+
+=================================================================
+  HOTSPOTS DE MEMORIA
+=================================================================
+
+  ▸ 2. Meridian (instanciacion)
+       +0.62 MB  <frozen importlib._bootstrap_external>:784
+       +0.53 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/config.py:228
+       +0.41 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/source_info_util.py:213
+       +0.39 MB  <frozen abc>:123
+       +0.14 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/interpreters/pxla.py:2956
+
+  ▸ 3. MCMC produccion (4c×1500 steps)
+      +42.47 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/source_info_util.py:213
+       +3.17 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/interpreters/partial_eval.py:1931
+       +2.97 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/config.py:228
+       +2.66 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/interpreters/partial_eval.py:1836
+       +2.64 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/interpreters/partial_eval.py:1835
+
+  ▸ 4. Analyzer (incremental_outcome)
+       +0.09 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/source_info_util.py:213
+       +0.06 MB  /home/javilazaro/.local/lib/python3.13/site-packages/jax/_src/config.py:228

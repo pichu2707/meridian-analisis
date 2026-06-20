@@ -1,0 +1,163 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1781822692.421452  342846 cuda_executor.cc:1309] INTERNAL: CUDA Runtime error: Failed call to cudaGetRuntimeVersion: Error loading CUDA libraries. GPU will not be used.: Error loading CUDA libraries. GPU will not be used.
+W0000 00:00:1781822692.428359  342846 gpu_device.cc:2342] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+I0000 00:00:1781822692.778510  342846 device_compiler.h:196] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+
+=================================================================
+  MERIDIAN PROFILING — PIPELINE COMPLETO
+  Perfil: MEDIANO | Backend: TF
+  Geos: 10 | Media ch: 8 | RF ch: 4 | Tiempo: 104 semanas
+  Datos estimados: ~0.1 MB (arrays float32)
+=================================================================
+
+  [warmup] Cargando módulos...
+  [warmup] Listo en 2.3s
+
+
+▶  Midiendo: 1. InputData (xarray)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        0.311s
+   🧠 Memoria delta: 0.66 MB
+
+=================================================================
+  DIMENSIONES DEL DATASET
+=================================================================
+  kpi shape     = (10, 104)
+  media shape   = (10, 107, 8)
+  reach shape   = (10, 107, 4)
+  controls      = (10, 104, 4)
+  Datos (float32): ~0.13 MB
+=================================================================
+
+
+▶  Midiendo: 2. Meridian (instanciacion)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        0.667s
+   🧠 Memoria delta: 3.14 MB
+
+▶  Midiendo: 3. Sample prior (10 draws)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        0.668s
+   🧠 Memoria delta: 0.85 MB
+
+▶  Midiendo: 4. Analyzer (incremental_outcome)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        7.229s
+   🧠 Memoria delta: 2.94 MB
+
+▶  Midiendo: 5. BudgetOptimizer (optimize)
+   ───────────────────────────────────────────────────────
+   ⏱  Tiempo:        1.937s
+   🧠 Memoria delta: 1.03 MB
+
+=================================================================
+  RESUMEN — MEDIANO | TF
+=================================================================
+  Fase                                     Tiempo (s)  Mem Δ (MB)
+  ────────────────────────────────────────────────────────────
+  1. InputData (xarray)                        0.311        0.66
+  2. Meridian (instanciacion)                  0.667        3.14
+  3. Sample prior (10 draws)                   0.668        0.85
+  4. Analyzer (incremental_outcome)            7.229        2.94
+  5. BudgetOptimizer (optimize)                1.937        1.03
+  ────────────────────────────────────────────────────────────
+  TOTAL                                       10.812        8.62
+=================================================================
+
+
+=================================================================
+  HOTSPOTS DE CPU
+=================================================================
+
+  ▸ 1. InputData (xarray)
+    ───────────────────────────────────────────────────────
+       List reduced from 811 to 15 due to restriction <15>
+            1    0.000    0.000    0.311    0.311 /home/javilazaro/Documents/meridian-profiling/meridian_synthetic_data.py:95(construir_input_data)
+            1    0.000    0.000    0.311    0.311 /home/javilazaro/Documents/meridian/meridian/meridian/data/test_utils.py:1790(sample_input_data_revenue)
+            1    0.000    0.000    0.280    0.280 <string>:2(__init__)
+            1    0.000    0.000    0.280    0.280 /home/javilazaro/Documents/meridian/meridian/meridian/data/input_data.py:291(__post_init__)
+            1    0.000    0.000    0.250    0.250 /home/javilazaro/Documents/meridian/meridian/meridian/data/input_data.py:783(_validate_time_formats)
+            8    0.002    0.000    0.250    0.031 /home/javilazaro/Documents/meridian/meridian/meridian/data/validator.py:22(validate_time_coord_format)
+          856    0.001    0.000    0.155    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/xarray/core/dataarray.py:888(__getitem__)
+          851    0.000    0.000    0.155    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/xarray/core/common.py:208(_iter)
+          845    0.008    0.000    0.142    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/xarray/core/dataarray.py:1509(isel)
+
+  ▸ 2. Meridian (instanciacion)
+    ───────────────────────────────────────────────────────
+       List reduced from 2362 to 15 due to restriction <15>
+            8    0.000    0.000    0.600    0.075 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/util/tf_stack.py:45(__enter__)
+            4    0.000    0.000    0.299    0.075 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/impl/api.py:260(_convert_actual)
+            4    0.000    0.000    0.299    0.075 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/transpiler.py:266(transform)
+            4    0.000    0.000    0.299    0.075 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/transpiler.py:432(transform_function)
+    12248/124    0.012    0.000    0.243    0.002 /usr/lib/python3.13/ast.py:418(visit)
+            3    0.000    0.000    0.219    0.073 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/transpiler.py:324(transform_function)
+            3    0.000    0.000    0.201    0.067 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/impl/api.py:235(transform_ast)
+     8473/290    0.032    0.000    0.183    0.001 /usr/lib/python3.13/ast.py:492(generic_visit)
+      635/491    0.001    0.000    0.180    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/ops/weak_tensor_ops.py:140(wrapper)
+
+  ▸ 3. Sample prior (10 draws)
+    ───────────────────────────────────────────────────────
+       List reduced from 1164 to 15 due to restriction <15>
+          507    0.005    0.000    0.127    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow_probability/python/internal/prefer_static.py:60(wrap)
+            1    0.000    0.000    0.102    0.102 /home/javilazaro/.local/lib/python3.13/site-packages/arviz/data/converters.py:19(convert_to_inference_data)
+            1    0.000    0.000    0.102    0.102 /home/javilazaro/.local/lib/python3.13/site-packages/arviz/data/base.py:302(pytree_to_dataset)
+    79172/78105    0.020    0.000    0.100    0.000 {built-in method builtins.isinstance}
+           21    0.001    0.000    0.085    0.004 /home/javilazaro/.local/lib/python3.13/site-packages/arviz/data/base.py:213(numpy_to_data_array)
+         4827    0.014    0.000    0.078    0.000 /usr/lib/python3.13/typing.py:2104(__instancecheck__)
+         2595    0.005    0.000    0.070    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/util/nest_util.py:866(_tf_core_pack_sequence_as)
+          507    0.000    0.000    0.064    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/util/nest.py:423(pack_sequence_as)
+          507    0.000    0.000    0.063    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/util/nest_util.py:729(pack_sequence_as)
+
+  ▸ 4. Analyzer (incremental_outcome)
+    ───────────────────────────────────────────────────────
+       List reduced from 1935 to 15 due to restriction <15>
+           32    0.000    0.000    6.956    0.217 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/impl/api.py:260(_convert_actual)
+           32    0.008    0.000    6.956    0.217 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/transpiler.py:266(transform)
+           32    0.006    0.000    6.947    0.217 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/transpiler.py:432(transform_function)
+        55/17    0.002    0.000    6.657    0.392 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/util/tf_stack.py:45(__enter__)
+    246154/848    0.254    0.000    5.918    0.007 /usr/lib/python3.13/ast.py:418(visit)
+           20    0.000    0.000    5.111    0.256 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/transpiler.py:324(transform_function)
+           20    0.005    0.000    4.863    0.243 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/impl/api.py:235(transform_ast)
+    165392/3242    0.666    0.000    4.614    0.001 /usr/lib/python3.13/ast.py:492(generic_visit)
+    99380/440    0.529    0.000    4.413    0.010 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/transformer.py:417(visit)
+
+  ▸ 5. BudgetOptimizer (optimize)
+    ───────────────────────────────────────────────────────
+       List reduced from 1945 to 15 due to restriction <15>
+      417/395    0.010    0.000    0.599    0.002 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/eager/polymorphic_function/polymorphic_function.py:805(__call__)
+      417/395    0.003    0.000    0.577    0.001 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/eager/polymorphic_function/polymorphic_function.py:852(_call)
+      417/395    0.002    0.000    0.543    0.001 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/eager/polymorphic_function/tracing_compilation.py:125(call_function)
+          686    0.001    0.000    0.356    0.001 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/framework/extension_type.py:221(_tf_extension_type_convert_fields)
+          686    0.000    0.000    0.355    0.001 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/framework/extension_type_field.py:200(convert_fields)
+          686    0.007    0.000    0.355    0.001 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/framework/extension_type_field.py:242(_convert_fields)
+    25279/9499    0.059    0.000    0.346    0.000 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/framework/extension_type_field.py:270(_convert_value)
+          418    0.001    0.000    0.300    0.001 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/eager/polymorphic_function/atomic_function.py:214(call_preflattened)
+          418    0.003    0.000    0.279    0.001 /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/eager/context.py:1680(call_function)
+
+=================================================================
+  HOTSPOTS DE MEMORIA
+=================================================================
+
+  ▸ 1. InputData (xarray)
+       +0.08 MB  /home/javilazaro/.local/lib/python3.13/site-packages/xarray/core/utils.py:395
+       +0.07 MB  /home/javilazaro/Documents/meridian/meridian/meridian/data/test_utils.py:700
+       +0.06 MB  /home/javilazaro/Documents/meridian/meridian/meridian/data/test_utils.py:829
+
+  ▸ 2. Meridian (instanciacion)
+       +1.88 MB  <frozen abc>:123
+       +0.06 MB  /usr/lib/python3.13/ast.py:420
+       +0.05 MB  /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/framework/constant_op.py:108
+
+  ▸ 3. Sample prior (10 draws)
+       +0.22 MB  <frozen abc>:123
+
+  ▸ 4. Analyzer (incremental_outcome)
+       +0.61 MB  /usr/lib/python3.13/linecache.py:172
+       +0.32 MB  <frozen abc>:123
+       +0.27 MB  <frozen importlib._bootstrap>:488
+       +0.22 MB  /home/javilazaro/.local/lib/python3.13/site-packages/tensorflow/python/autograph/pyct/anno.py:141
+       +0.11 MB  <string>:1
+
+  ▸ 5. BudgetOptimizer (optimize)
+       +0.12 MB  /usr/lib/python3.13/dataclasses.py:1323
