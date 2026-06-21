@@ -28,7 +28,7 @@ import warnings
 # ──────────────────────────────────────────────────────────────────────────────
 # SETUP
 # ──────────────────────────────────────────────────────────────────────────────
-sys.path.insert(0, "/home/javilazaro/Documents/meridian/meridian")
+sys.path.insert(0, "/home/javilazaro/Documents/meridian")
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 os.environ["PYTHONWARNINGS"] = "ignore"
 warnings.filterwarnings("ignore")
